@@ -12,6 +12,7 @@
     "build:server": "npm run build --prefix server",
     "build:all": "npm run build && npm run build --prefix server",
     "start": "node server/dist/index.js",
+    "postinstall": "npm install --prefix server --omit=dev",
     "db:seed": "npm run db:seed --prefix server",
     "db:migrate": "npm run db:migrate --prefix server",
     "lint": "oxlint",
