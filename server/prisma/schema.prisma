@@ -1,0 +1,108 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./jackpot.db"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  email        String   @unique
+  passwordHash String
+  role         String   @default("USER") // USER | MODERATOR | ADMIN | OWNER
+  status       String   @default("ACTIVE") // ACTIVE | BANNED | SUSPENDED
+  level        Int      @default(1)
+  xp           Int      @default(0)
+  xpRequired   Int      @default(1000)
+  coins        Int      @default(1000)
+  gems         Int      @default(5)
+  avatar       String   @default("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=faces")
+  online       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  lastLoginAt  DateTime @default(now())
+
+  refreshTokens    RefreshToken[]
+  ownedBoosts      OwnedBoost[]
+  inventory        CollectibleItem[]
+  gameHistory      GameHistory[]
+  dailyRewardClaims DailyRewardClaim[]
+  adminLogsAsAdmin AdminLog[] @relation("AdminLogs")
+  adminLogsAsTarget AdminLog[] @relation("TargetLogs")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OwnedBoost {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  shopItemId  String
+  purchasedAt DateTime @default(now())
+  expiresAt   DateTime?
+  isActive    Boolean  @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, shopItemId])
+}
+
+model CollectibleItem {
+  id          String   @id @default(cuid())
+  userId      Int
+  name        String
+  category    String
+  rarity      String   // common | rare | epic | legendary | mythic
+  value       Int
+  iconType    String
+  description String
+  obtainedAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model GameHistory {
+  id         String   @id @default(cuid())
+  userId     Int
+  game       String
+  betAmount  Int
+  multiplier Float    @default(0)
+  payout     Int      @default(0)
+  result     String   // WIN | LOSS
+  playedAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model DailyRewardClaim {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  day       Int      // 1-7
+  claimedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AdminLog {
+  id           String   @id @default(cuid())
+  adminId      Int
+  targetUserId Int?
+  action       String
+  value        String
+  reason       String   @default("")
+  createdAt    DateTime @default(now())
+
+  admin       User  @relation("AdminLogs", fields: [adminId], references: [id])
+  targetUser  User? @relation("TargetLogs", fields: [targetUserId], references: [id])
+}

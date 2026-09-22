@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - NODE_ENV=production
+      - DATABASE_URL=file:./jackpot.db
+      - JWT_SECRET=change-this-in-production-jwt-secret-key-12345
+      - JWT_REFRESH_SECRET=change-this-in-production-refresh-secret-67890
+      - CLIENT_URL=http://localhost:3001
+    volumes:
+      - jackpot_data:/app/server/prisma
+
+volumes:
+  jackpot_data:
