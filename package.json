@@ -12,21 +12,30 @@
     "build:server": "npm run build --prefix server",
     "build:all": "npm run build && npm run build --prefix server",
     "start": "node server/dist/index.js",
-    "postinstall": "npm install --prefix server --omit=dev",
+    "postinstall": "npx prisma generate",
     "db:seed": "npm run db:seed --prefix server",
     "db:migrate": "npm run db:migrate --prefix server",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "@tailwindcss/vite": "^4.3.3",
+    "bcryptjs": "^2.4.3",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
+    "express": "^4.21.2",
     "framer-motion": "^13.3.0",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^1.46.0",
+    "prisma": "^5.22.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "tailwind-merge": "^3.7.0"
+    "tailwind-merge": "^3.7.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",
@@ -41,5 +50,8 @@
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vite": "^8.3.0"
+  },
+  "prisma": {
+    "schema": "server/prisma/schema.prisma"
   }
 }
