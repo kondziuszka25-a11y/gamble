@@ -2,10 +2,8 @@
 node_modules/
 server/node_modules/
 
-# Production build outputs
-dist/
+# Production build outputs (tracked for hosting deployment)
 dist-ssr/
-server/dist/
 
 # Environment files
 .env
