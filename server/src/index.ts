@@ -14,6 +14,8 @@ import leaderboardRouter from './routes/leaderboard';
 import gamesRouter from './routes/games';
 import adminRouter from './routes/admin';
 import casesRouter from './routes/cases';
+import { prisma } from './lib/prisma';
+import bcrypt from 'bcryptjs';
 
 const app = express();
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3001;
@@ -123,7 +125,32 @@ process.on('uncaughtException', (err) => {
   // Do NOT exit — keep server alive
 });
 
-app.listen(PORT, () => {
-  console.log(`🎰 JACKPOT Server running on http://localhost:${PORT}`);
+app.listen(PORT, async () => {
+  console.log(`🎰 JACKPOT Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+
+  // Automatically ensure owner account exists on startup
+  try {
+    const userCount = await prisma.user.count().catch(() => null);
+    if (userCount === 0) {
+      console.log('🌱 Empty database detected: seeding default owner account (kondom)...');
+      const hashedPassword = await bcrypt.hash('Kondzio25!', 10);
+      await prisma.user.create({
+        data: {
+          username: 'kondom',
+          email: 'kondom@jackpot.gg',
+          passwordHash: hashedPassword,
+          role: 'OWNER',
+          coins: 1000,
+          gems: 5,
+          level: 1,
+          xp: 0,
+          xpRequired: 1000,
+        },
+      });
+      console.log('👑 Owner account (kondom) created successfully!');
+    }
+  } catch (err: any) {
+    console.warn('⚠️ Startup DB check note:', err?.message || err);
+  }
 });
