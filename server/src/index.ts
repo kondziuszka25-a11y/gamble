@@ -16,7 +16,7 @@ import adminRouter from './routes/admin';
 import casesRouter from './routes/cases';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || process.env.SERVER_PORT || 3001;
 
 // ── CORS configuration for development & production ──────────────────────────
 const defaultOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];

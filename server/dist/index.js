@@ -19,7 +19,7 @@ const games_1 = __importDefault(require("./routes/games"));
 const admin_1 = __importDefault(require("./routes/admin"));
 const cases_1 = __importDefault(require("./routes/cases"));
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || process.env.SERVER_PORT || 3001;
 // ── CORS configuration for development & production ──────────────────────────
 const defaultOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
 const envOrigins = process.env.CLIENT_URL
