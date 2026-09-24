@@ -16,7 +16,9 @@ import {
   Brain,
   Spade,
   TrainFront,
+  Lock,
 } from 'lucide-react';
+import { useGame } from '../../context/GameContext';
 
 interface GameCardProps {
   game: GameInfo;
@@ -24,6 +26,8 @@ interface GameCardProps {
 }
 
 export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
+  const { isGameEnabled } = useGame();
+  const isEnabled = isGameEnabled(game.id);
   const getGameIcon = () => {
     switch (game.id) {
       case 'crash':
@@ -74,13 +78,27 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
 
   return (
     <div
-      onClick={() => onPlay(game.id)}
-      className={`group relative flex flex-col justify-between p-6 rounded-3xl bg-[#0D1324] border border-white/[0.08] hover:border-purple-500/40 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl cursor-pointer overflow-hidden ${game.glowColor}`}
+      onClick={() => { if (isEnabled) onPlay(game.id); }}
+      className={`group relative flex flex-col justify-between p-6 rounded-3xl bg-[#0D1324] border border-white/[0.08] transition-all duration-300 overflow-hidden ${
+        isEnabled
+          ? `hover:border-purple-500/40 hover:-translate-y-1.5 hover:shadow-2xl cursor-pointer ${game.glowColor}`
+          : 'border-white/[0.04] cursor-not-allowed opacity-60'
+      }`}
     >
       {/* Background Accent Gradient */}
       <div
-        className={`absolute inset-0 bg-gradient-to-br ${game.gradient} opacity-40 group-hover:opacity-75 transition-opacity`}
+        className={`absolute inset-0 bg-gradient-to-br ${game.gradient} ${
+          isEnabled ? 'opacity-40 group-hover:opacity-75' : 'opacity-20'
+        } transition-opacity`}
       />
+
+      {/* Disabled Overlay */}
+      {!isEnabled && (
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#05070D]/70 rounded-3xl gap-2">
+          <Lock className="w-8 h-8 text-slate-400" />
+          <span className="text-xs font-black uppercase tracking-widest text-slate-400">Niedostępna</span>
+        </div>
+      )}
 
       {/* Top Header: Icon and Badge */}
       <div className="relative z-10 flex items-center justify-between">
@@ -126,16 +144,23 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onPlay }) => {
             {game.activePlayers}
           </span>
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onPlay(game.id);
-            }}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-600/30 group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 text-purple-200 group-hover:text-white text-xs font-black uppercase tracking-wider transition-all shadow-md group-hover:shadow-purple-600/30"
-          >
-            <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
-            <span>Graj</span>
-          </button>
+          {isEnabled ? (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onPlay(game.id);
+              }}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-600/30 group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 text-purple-200 group-hover:text-white text-xs font-black uppercase tracking-wider transition-all shadow-md group-hover:shadow-purple-600/30"
+            >
+              <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+              <span>Graj</span>
+            </button>
+          ) : (
+            <span className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-700/30 text-slate-500 text-xs font-black uppercase tracking-wider">
+              <Lock className="w-3.5 h-3.5 ml-0.5" />
+              <span>Zablok.</span>
+            </span>
+          )}
         </div>
       </div>
     </div>

@@ -58,6 +58,12 @@ interface GameContextType {
   updateUserRole: (userId: number, newRole: UserRole, reason: string) => void;
   toggleUserStatus: (userId: number, reason: string) => void;
   resetUserPassword: (userId: number) => string;
+  // Game availability & Maintenance
+  disabledGames: Record<string, boolean>;
+  toggleGameStatus: (gameId: string) => void;
+  isGameEnabled: (gameId: string) => boolean;
+  maintenanceMode: boolean;
+  toggleMaintenanceMode: () => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -76,6 +82,51 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(false);
   const [isDailyClaimed, setIsDailyClaimed] = useState<boolean>(false);
   const [isSoundEnabled, setIsSoundEnabled] = useState<boolean>(true);
+
+  // Game availability & maintenance state persisted in localStorage
+  const DISABLED_GAMES_KEY = 'neonvault_disabled_games';
+  const MAINTENANCE_MODE_KEY = 'neonvault_maintenance_mode';
+
+  const [disabledGames, setDisabledGames] = useState<Record<string, boolean>>(() => {
+    try {
+      const stored = localStorage.getItem(DISABLED_GAMES_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const [maintenanceMode, setMaintenanceMode] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(MAINTENANCE_MODE_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const toggleGameStatus = useCallback((gameId: string) => {
+    setDisabledGames((prev) => {
+      const next = { ...prev, [gameId]: !prev[gameId] };
+      try {
+        localStorage.setItem(DISABLED_GAMES_KEY, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  }, []);
+
+  const isGameEnabled = useCallback((gameId: string) => {
+    return !disabledGames[gameId];
+  }, [disabledGames]);
+
+  const toggleMaintenanceMode = useCallback(() => {
+    setMaintenanceMode((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(MAINTENANCE_MODE_KEY, String(next));
+      } catch {}
+      return next;
+    });
+  }, []);
 
   // Achievements with 48h platform-wide synchronized reset
   const ACHIEVEMENTS_CYCLE_KEY = 'neonvault_achievements_cycle';
@@ -691,6 +742,11 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         updateUserRole,
         toggleUserStatus,
         resetUserPassword,
+        disabledGames,
+        toggleGameStatus,
+        isGameEnabled,
+        maintenanceMode,
+        toggleMaintenanceMode,
       }}
     >
       {children}

@@ -11,7 +11,7 @@ interface GamesGridProps {
 }
 
 export const GamesGrid: React.FC<GamesGridProps> = ({ searchFilter }) => {
-  const { playSound } = useGame();
+  const { playSound, isGameEnabled } = useGame();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeGameModal, setActiveGameModal] = useState<GameInfo | null>(null);
 
@@ -37,6 +37,7 @@ export const GamesGrid: React.FC<GamesGridProps> = ({ searchFilter }) => {
   });
 
   const handleLaunchGame = (gameId: string) => {
+    if (!isGameEnabled(gameId)) return;
     playSound('click');
     const found = GAMES_LIST.find((g) => g.id === gameId);
     if (found) {

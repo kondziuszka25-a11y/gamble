@@ -17,6 +17,7 @@ import { AdminModal } from './components/admin/AdminModal';
 import { GemShop } from './components/shop/GemShop';
 import { CasesSection } from './components/cases/CasesSection';
 import { Hexagon } from 'lucide-react';
+import type { User } from './types';
 
 const MainDashboard: React.FC = () => {
   const { activeTab, setActiveTab } = useGame();
@@ -118,8 +119,42 @@ const MainDashboard: React.FC = () => {
   );
 };
 
+interface MainDashboardWithMaintenanceProps {
+  currentUser: User | null;
+}
+
+const MainDashboardWithMaintenance: React.FC<MainDashboardWithMaintenanceProps> = ({ currentUser }) => {
+  const { maintenanceMode } = useGame();
+  const isStaff = currentUser?.role === 'OWNER' || currentUser?.role === 'ADMIN' || currentUser?.role === 'MODERATOR';
+
+  return (
+    <>
+      <MainDashboard />
+      {maintenanceMode && !isStaff && (
+        <div className="fixed inset-0 z-[9999] bg-[#05070D]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+          <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 shadow-2xl shadow-amber-500/30 p-[2px] mb-6">
+            <div className="w-full h-full bg-[#090D18] rounded-[14px] flex items-center justify-center">
+              <Hexagon className="w-10 h-10 text-amber-400 fill-amber-400/20" />
+            </div>
+          </div>
+          <h1 className="text-3xl font-black text-white tracking-wider mb-2">
+            Przerwa techniczna
+          </h1>
+          <p className="text-slate-400 max-w-sm leading-relaxed text-sm">
+            Platforma jest chwilowo niedostępna. Pracujemy nad ulepszeniami — wróć za chwilę!
+          </p>
+          <div className="mt-8 flex items-center gap-2 text-xs text-amber-400/60 font-mono">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            JACKPOT · Maintenance Mode
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
 const AppContent: React.FC = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
     return (
@@ -146,7 +181,7 @@ const AppContent: React.FC = () => {
 
   return (
     <GameProvider>
-      <MainDashboard />
+      <MainDashboardWithMaintenance currentUser={user} />
     </GameProvider>
   );
 };

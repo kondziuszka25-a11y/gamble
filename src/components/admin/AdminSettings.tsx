@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GAMES_LIST } from '../../data/mockData';
+import { useGame } from '../../context/GameContext';
 import {
   Shield,
   CheckCircle2,
@@ -13,27 +14,24 @@ interface AdminSettingsProps {
 }
 
 export const AdminSettings: React.FC<AdminSettingsProps> = ({ mode = 'settings' }) => {
-  const [gamesState, setGamesState] = useState<Record<string, boolean>>({
-    crash: true,
-    mines: true,
-    coinflip: true,
-    jackpot: true,
-    wheel: true,
-    dice: true,
-    tower: true,
-    plinko: true,
-  });
+  const {
+    isGameEnabled,
+    toggleGameStatus,
+    maintenanceMode,
+    toggleMaintenanceMode,
+    playSound,
+  } = useGame();
 
-  const [maintenanceMode, setMaintenanceMode] = useState<boolean>(false);
   const [fairnessSha, setFairnessSha] = useState<string>('sha256-standard-v2.6.4');
   const [notification, setNotification] = useState<string | null>(null);
 
   const toggleGame = (id: string) => {
-    setGamesState((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-    setNotification(`Zaktualizowano status dostępności gry ${id.toUpperCase()}`);
+    toggleGameStatus(id);
+    playSound('click');
+    const willBeEnabled = !isGameEnabled(id);
+    setNotification(
+      `${willBeEnabled ? '🟢 Włączono' : '🔴 Zablokowano'} dostępność gry ${id.toUpperCase()}`
+    );
     setTimeout(() => setNotification(null), 3000);
   };
 
@@ -63,7 +61,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ mode = 'settings' 
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {GAMES_LIST.map((game) => {
-            const isEnabled = gamesState[game.id] ?? true;
+            const isEnabled = isGameEnabled(game.id);
 
             return (
               <div
@@ -173,7 +171,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ mode = 'settings' 
             <span className="text-[11px] text-slate-400">Blokuje wstęp zwykłym graczom, wpuszcza tylko kadrę.</span>
           </div>
           <button
-            onClick={() => setMaintenanceMode(!maintenanceMode)}
+            onClick={toggleMaintenanceMode}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors ${
               maintenanceMode
                 ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
