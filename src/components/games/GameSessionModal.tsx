@@ -644,7 +644,7 @@ export const GameSessionModal: React.FC<GameSessionModalProps> = ({ game, onClos
                       : 'bg-white/[0.04] text-slate-400 hover:text-white'
                   }`}
                 >
-                  🦅 ORZEŁ (2.0x)
+                  🦅 ORZEŁ (1.85x)
                 </button>
                 <button
                   onClick={() => setSelectedSide('RESZKA')}
@@ -655,7 +655,7 @@ export const GameSessionModal: React.FC<GameSessionModalProps> = ({ game, onClos
                       : 'bg-white/[0.04] text-slate-400 hover:text-white'
                   }`}
                 >
-                  🪙 RESZKA (2.0x)
+                  🪙 RESZKA (1.85x)
                 </button>
               </div>
 

@@ -36,10 +36,10 @@ export const GAMES_LIST: GameInfo[] = [
   {
     id: 'crash',
     name: 'Crash',
-    description: 'Odbierz wygraną zanim rakieta odleci. Im dłużej czekasz, tym więcej zarabiasz — ale ryzykujesz wszystko!',
+    description: 'Odbierz wygraną zanim rakieta eksploduje. Im dłużej czekasz, tym wyższy mnożnik — ale ryzykujesz utratę całej stawki!',
     iconName: 'Rocket',
     badge: 'POPULARNE',
-    maxMultiplier: '100x+',
+    maxMultiplier: '50x+',
     activePlayers: 421,
     gradient: 'from-purple-600/30 via-indigo-900/20 to-transparent',
     glowColor: 'hover:border-purple-500/50 hover:shadow-purple-500/25',
@@ -47,10 +47,10 @@ export const GAMES_LIST: GameInfo[] = [
   {
     id: 'hilo',
     name: 'Hi-Lo',
-    description: 'Zgadnij czy następna karta będzie wyższa czy niższa. Kumuluj mnożnik i wypłać w idealnym momencie!',
+    description: 'Zgadnij czy następna karta będzie wyższa, niższa czy równa. Kumuluj mnożnik po każdej trafieniu i wypłać w idealnym momencie!',
     iconName: 'Layers',
     badge: 'NOWE',
-    maxMultiplier: '500x+',
+    maxMultiplier: '20x+',
     activePlayers: 312,
     gradient: 'from-blue-600/30 via-indigo-900/20 to-transparent',
     glowColor: 'hover:border-blue-500/50 hover:shadow-blue-500/25',
@@ -58,10 +58,10 @@ export const GAMES_LIST: GameInfo[] = [
   {
     id: 'mines',
     name: 'Miny',
-    description: 'Odkrywaj bezpieczne pola na siatce 5×5 i zwiększaj mnożnik. Jedno złe pole kończy rundę — wypłać w porę!',
+    description: 'Odkrywaj bezpieczne pola na siatce 5×5 i zwiększaj mnożnik. Jedno złe pole kończy rundę — wypłać przed eksplozją!',
     iconName: 'Bomb',
     badge: 'HOT',
-    maxMultiplier: '50x+',
+    maxMultiplier: '17x',
     activePlayers: 289,
     gradient: 'from-pink-600/30 via-rose-900/20 to-transparent',
     glowColor: 'hover:border-pink-500/50 hover:shadow-pink-500/25',
@@ -69,10 +69,10 @@ export const GAMES_LIST: GameInfo[] = [
   {
     id: 'coinflip',
     name: 'Coinflip',
-    description: 'Obstawiasz orzeł lub reszka. Prosto i szybko — 50/50 szans na podwojenie stawki.',
+    description: 'Obstawiaj orzeł lub reszka. Prosto i szybko — trafisz 1.85x zwrotu ze stawki!',
     iconName: 'Coins',
     badge: 'KLASYK',
-    maxMultiplier: '2.0x',
+    maxMultiplier: '1.85x',
     activePlayers: 195,
     gradient: 'from-amber-600/30 via-yellow-900/20 to-transparent',
     glowColor: 'hover:border-amber-500/50 hover:shadow-amber-500/25',
@@ -80,10 +80,10 @@ export const GAMES_LIST: GameInfo[] = [
   {
     id: 'wheel',
     name: 'Koło Fortuny',
-    description: 'Zakręć kołem z 8 sektorami i traf mnożnik od 0x do 20x. Każdy obrót to nowa szansa!',
+    description: 'Zakręć kołem z 8 sektorami — traf jackpot 5x lub strać wszystko na zerze. Każdy obrót to nowa szansa!',
     iconName: 'Disc',
     badge: 'NOWE',
-    maxMultiplier: '20x',
+    maxMultiplier: '5x',
     activePlayers: 174,
     gradient: 'from-emerald-600/30 via-teal-900/20 to-transparent',
     glowColor: 'hover:border-emerald-500/50 hover:shadow-emerald-500/25',
@@ -91,7 +91,7 @@ export const GAMES_LIST: GameInfo[] = [
   {
     id: 'scratch',
     name: 'Cyber Zdrapki',
-    description: 'Zdrapuj holograficzne pola 3×3. Traf 3 identyczne symbole i zgarnij natychmiastową wygraną!',
+    description: 'Zdrapuj holograficzne pola 3×3. Traf 3 identyczne symbole — korona daje 50x stawki!',
     iconName: 'Ticket',
     badge: 'HOT',
     maxMultiplier: '50x',
@@ -102,10 +102,10 @@ export const GAMES_LIST: GameInfo[] = [
   {
     id: 'puzzle',
     name: 'Puzzle Rush',
-    description: 'Szybka gra logiczna na czas. Zero losowości — liczy się refleks, pamięć i myślenie!',
+    description: 'Szybka gra logiczna na czas: matematyka, pamięć, wzorce. Zero losowości — liczy się refleks i myślenie!',
     iconName: 'Brain',
     badge: 'SKILL',
-    maxMultiplier: '5.0x',
+    maxMultiplier: '5x',
     activePlayers: 182,
     gradient: 'from-violet-600/30 via-purple-900/20 to-transparent',
     glowColor: 'hover:border-violet-500/50 hover:shadow-violet-500/25',
@@ -113,7 +113,7 @@ export const GAMES_LIST: GameInfo[] = [
   {
     id: 'blackjack',
     name: 'Blackjack 21',
-    description: 'Klasyczny stół kasynowy przeciwko krupierowi. Dobieraj, pasuj, podwajaj stawkę i poluj na 21!',
+    description: 'Klasyczny stół kasynowy przeciwko krupierowi. Dobieraj, pasuj, podwajaj stawkę. Blackjack wypłaca 2.4x!',
     iconName: 'Spade',
     badge: 'NOWE',
     maxMultiplier: '2.4x',
@@ -124,7 +124,7 @@ export const GAMES_LIST: GameInfo[] = [
   {
     id: 'train',
     name: 'Neon Train',
-    description: 'Pociąg Cyber-Maglev mknie przez kolejne stacje metropolii. Wysiądź z zyskiem na stacji lub ryzykuj podróż po mnożnik 16x!',
+    description: 'Pociąg Cyber-Maglev mknie przez 8 stacji. Wysiądź z zyskiem lub jedź do terminala po maksimum 16x!',
     iconName: 'TrainFront',
     badge: 'HOT',
     maxMultiplier: '16x',
@@ -133,6 +133,7 @@ export const GAMES_LIST: GameInfo[] = [
     glowColor: 'hover:border-cyan-500/50 hover:shadow-cyan-500/25',
   },
 ];
+
 
 export const COLLECTIBLE_ITEMS: CollectibleItem[] = [];
 
